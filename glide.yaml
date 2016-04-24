@@ -10,4 +10,3 @@ import:
   subpackages:
   - testing
 - package: github.com/jinzhu/gorm
-- package: strings
