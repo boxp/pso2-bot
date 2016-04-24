@@ -1,0 +1,52 @@
+hash: 4106bac95b8c76b4e8d6267e3006f85b0ed2aa0a6e79548c0c7619ecfb059bb9
+updated: 2016-04-24T18:26:21.163432682+09:00
+imports:
+- name: github.com/agtorre/gocolorize
+  version: f42b554bf7f006936130c9bb4f971afd2d87f671
+- name: github.com/azr/backoff
+  version: 53511d3c733003985b0b76f733df1f4d0095ee6a
+- name: github.com/ChimeraCoder/anaconda
+  version: afffdbac178c0e78746ea42d7c1af963cb7ef28e
+- name: github.com/ChimeraCoder/tokenbucket
+  version: c5a927568de7aad8a58127d80bcd36ca4e71e454
+- name: github.com/dustin/go-jsonpointer
+  version: 2efc9fef1d9421a8d252a32e20beb10cecd2bbca
+- name: github.com/dustin/gojson
+  version: 2e71ec9dd5adce3b168cd0dbde03b5cc04951c30
+- name: github.com/garyburd/go-oauth
+  version: 719b069913e1151a73ea30d2ea4f90deda3ce234
+  subpackages:
+  - oauth
+- name: github.com/go-sql-driver/mysql
+  version: 7ebe0a500653eeb1859664bed5e48dec1e164e73
+- name: github.com/jinzhu/gorm
+  version: 5174cc5c242a728b435ea2be8a2f7f998e15429b
+- name: github.com/jinzhu/inflection
+  version: 3272df6c21d04180007eb3349844c89a3856bc25
+- name: github.com/revel/modules
+  version: 3589d5bf1d1b6da10a88c53701db2af12dfc0811
+  subpackages:
+  - static/app/controllers
+  - testrunner/app
+  - testrunner/app/controllers
+- name: github.com/revel/revel
+  version: a9a2ff45fae4330ef4116b257bcf9c82e53350c2
+  subpackages:
+  - testing
+- name: github.com/robfig/config
+  version: 0f78529c8c7e3e9a25f15876532ecbc07c7d99e6
+- name: github.com/robfig/pathtree
+  version: 41257a1839e945fce74afd070e02bab2ea2c776a
+- name: golang.org/x/net
+  version: b797637b7aeeed133049c7281bfa31dcc9ca42d6
+  subpackages:
+  - websocket
+- name: golang.org/x/sys
+  version: f64b50fbea64174967a8882830d621a18ee1548e
+  subpackages:
+  - unix
+- name: gopkg.in/fsnotify.v1
+  version: 30411dbcefb7a1da7e84f75530ad3abe4011b4f8
+- name: strings
+  version: ""
+devImports: []

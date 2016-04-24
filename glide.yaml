@@ -1,0 +1,13 @@
+package: github.com/boxp/pso2-bot
+import:
+- package: github.com/ChimeraCoder/anaconda
+- package: github.com/revel/modules
+  subpackages:
+  - static/app/controllers
+  - testrunner/app
+  - testrunner/app/controllers
+- package: github.com/revel/revel
+  subpackages:
+  - testing
+- package: github.com/jinzhu/gorm
+- package: strings
