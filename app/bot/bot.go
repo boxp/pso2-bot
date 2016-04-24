@@ -5,12 +5,15 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/boxp/pso2-bot/app/models"
 	"github.com/boxp/pso2-bot/app/services"
 	"github.com/revel/revel"
 )
+
+const timeLayout = "2006年01月02日15時04分05秒"
 
 type Bot struct {
 	Me            anaconda.User
@@ -57,6 +60,10 @@ func (b Bot) RegisterArks(tweet anaconda.Tweet, shipStr string) {
 	if err != nil {
 		log.Fatalf("Failed to parse shipStr %v\n", err)
 	}
+	if ship > 10 {
+		b.Reply(tweet, "Ship番号が不正です。")
+	}
+
 	name := tweet.User.Name
 	screenName := tweet.User.ScreenName
 
@@ -77,7 +84,7 @@ func (b Bot) SearchArks(tweet anaconda.Tweet, shipStr string) {
 
 	services.DeleteExpiredArks()
 
-	arkses := services.SearchArksByShip(ship)
+	arkses := services.SearchArksWithShip(ship)
 
 	if len(arkses) > 0 {
 		context = "Ship" + shipStr + "の人権獲得者です！\n"
@@ -94,7 +101,6 @@ func (b Bot) SearchArks(tweet anaconda.Tweet, shipStr string) {
 }
 
 func (b Bot) OnReply(tweet anaconda.Tweet) {
-
 	toRegisterRegexp := regexp.MustCompile(`Ship(\d+)で拉致[らさ]れた！`)
 	toSearchRegexp := regexp.MustCompile(`Ship(\d+)$`)
 
@@ -106,15 +112,41 @@ func (b Bot) OnReply(tweet anaconda.Tweet) {
 		shipStr := toRegisterRegexp.ReplaceAllString(t, `$1`)
 		b.RegisterArks(tweet, shipStr)
 	case toSearchRegexp.MatchString(t):
+		// Shipに所属する人権所持者を返信
 		shipStr := toSearchRegexp.ReplaceAllString(t, `$1`)
 		b.SearchArks(tweet, shipStr)
 	}
 }
 
-func (b Bot) Start() {
+func (b Bot) PostCurrentArkses() {
+	context := ""
+	now := time.Now()
 
+	services.DeleteExpiredArks()
+
+	arksCounts := services.SearchArksCountByShip()
+	if len(arksCounts) > 0 {
+		context = now.Format(timeLayout) + "現在のShip別人権獲得者数です。\n"
+
+		for _, arksCount := range arksCounts {
+			context = context + "Ship" + strconv.Itoa(arksCount.Ship) + ": " + strconv.Itoa(arksCount.Count) + "人\n"
+		}
+	} else {
+		context = now.Format(timeLayout) + "現在、人権獲得者は登録されていません。"
+	}
+
+	b.Api.PostTweet(context, nil)
+}
+
+func (b Bot) Start() {
 	// Replyの正規表現
 	r := regexp.MustCompile("@" + b.Me.ScreenName + " ")
+
+	// 定期Post
+	go func() {
+		b.PostCurrentArkses()
+		time.Sleep(time.Hour)
+	}()
 
 	// TwitterStream listner
 	for {

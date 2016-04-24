@@ -8,6 +8,11 @@ import (
 	"github.com/boxp/pso2-bot/app/models"
 )
 
+type ArksCount struct {
+	Ship  int
+	Count int
+}
+
 func CreateArks(arks models.Arks) {
 	tx := controllers.DB.Begin()
 
@@ -27,17 +32,24 @@ func DeleteExpiredArks() {
 
 	e := tx.Where("created_at <= ?", expiredDate).Delete(&models.Arks{}).Error
 	if e != nil {
-		log.Fatalf("Failed to delete arks %v\n", e)
 		tx.Rollback()
+		log.Fatalf("Failed to delete arks %v\n", e)
 	}
 
 	tx.Commit()
 }
 
-func SearchArksByShip(ship int) []models.Arks {
+func SearchArksWithShip(ship int) []models.Arks {
 	arkses := []models.Arks{}
 
 	controllers.DB.Find(&arkses, "ship = ?", ship)
 
 	return arkses
+}
+
+func SearchArksCountByShip() []ArksCount {
+	arksCounts := []ArksCount{}
+	controllers.DB.Table("arks").Select("COUNT(*) AS count, ship").Group("ship").Scan(&arksCounts)
+
+	return arksCounts
 }
