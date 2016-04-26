@@ -11,6 +11,9 @@
                  [org.clojure/core.async "0.2.374"
                   :exclusions [org.clojure/tools.reader]]
                  [sablono "0.3.6"]
+                 [secretary "1.2.3"]
+                 [cljs-ajax "0.5.4"]
+                 [prismatic/om-tools "0.3.12"]
                  [org.omcljs/om "0.9.0"]]
   
   :plugins [[lein-figwheel "0.5.2"]
@@ -18,16 +21,16 @@
 
   :source-paths ["src"]
 
-  :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
+  :clean-targets ^{:protect false} ["public/js/compiled" "target"]
 
   :cljsbuild {:builds
               [{:id "dev"
                 :source-paths ["assets/clojurescript"]
 
                 ;; If no code is to be run, set :figwheel true for continued automagical reloading
-                :figwheel {:on-jsload "pso2-bot.core/on-js-reload"}
+                :figwheel {:on-jsload "pso2-bot.route/on-js-reload"}
 
-                :compiler {:main pso2-bot.core
+                :compiler {:main pso2-bot.route
                            :asset-path "public/js/compiled/out"
                            :output-to "public/js/compiled/pso2_bot.js"
                            :output-dir "public/js/compiled/out"
@@ -38,7 +41,7 @@
                {:id "min"
                 :source-paths ["assets/clojurescript"]
                 :compiler {:output-to "public/js/compiled/pso2_bot.js"
-                           :main pso2-bot.core
+                           :main pso2-bot.route
                            :optimizations :advanced
                            :pretty-print false}}]}
 
